@@ -1,0 +1,221 @@
+*****DDL statements which demonstrate the use of SQL objects: Table, View, Index*****
+
+mysql> create database D1;
+Query OK, 1 row affected (0.09 sec)
+
+mysql> show databases;
++--------------------+
+| Database           |
++--------------------+
+| information_schema |
+| mysql              |
+| performance_schema |
+| sys                |
+| try                |
+| D1                 |          
++--------------------+
+7 rows in set (0.00 sec)
+
+mysql> use vaibhavi1;
+Database changed
+
+***QUERIES ON Table***
+
+mysql> create table student(s_id int,s_name varchar(20),age int,primary key(s_id));
+Query OK, 0 rows affected (0.65 sec)
+
+mysql> desc student;
++--------+-------------+------+-----+---------+-------+
+| Field  | Type        | Null | Key | Default | Extra |
++--------+-------------+------+-----+---------+-------+
+| s_id   | int         | NO   | PRI | NULL    |       |
+| s_name | varchar(20) | YES  |     | NULL    |       |
+| age    | int         | YES  |     | NULL    |       |
++--------+-------------+------+-----+---------+-------+
+3 rows in set (0.12 sec)
+
+mysql> insert into student(s_id,s_name,age) values
+    -> (1,'vaibhav',20),
+    -> (2,'suresh',20),
+    -> (3,'vikrant',21),
+    -> (4,'prathmesh',20),
+    -> (5,'abhishek',20),
+    -> (6,'prajakta',20),
+    -> (7,'pranav',19),
+    -> (8,'rohit',23);
+Query OK, 8 rows affected (0.30 sec)
+Records: 8  Duplicates: 0  Warnings: 0
+
+mysql> select * from student;
++------+-----------+------+
+| s_id | s_name    | age  |
++------+-----------+------+
+|    1 | vaibhav   |   20 |
+|    2 | suresh    |   20 |
+|    3 | vikrant   |   21 |
+|    4 | prathmesh |   20 |
+|    5 | abhishek  |   20 |
+|    6 | prajakta  |   20 |
+|    7 | pranav    |   19 |
+|    8 | rohit     |   23 |
++------+-----------+------+
+8 rows in set (0.00 sec)
+
+mysql> update student set age=20 where s_id=8;
+Query OK, 1 row affected (0.11 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> select * from student where s_id=8;
++------+--------+------+
+| s_id | s_name | age  |
++------+--------+------+
+|    8 | rohit  |   20 |
++------+--------+------+
+1 row in set (0.09 sec)
+
+mysql> delete from student where s_id=1;
+Query OK, 1 row affected (0.11 sec)
+
+mysql> select * from student;
++------+-----------+------+
+| s_id | s_name    | age  |
++------+-----------+------+
+|    2 | suresh    |   20 |
+|    3 | vikrant   |   21 |
+|    4 | prathmesh |   20 |
+|    5 | abhishek  |   20 |
+|    6 | prajakta  |   20 |
+|    7 | pranav    |   19 |
+|    8 | rohit     |   20 |
++------+-----------+------+
+7 rows in set (0.00 sec)
+
+***ALTER TABLE***
+
+mysql> alter table student add address varchar(20);
+Query OK, 0 rows affected (0.11 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+mysql> select * from student;
++------+-----------+------+---------+
+| s_id | s_name    | age  | address |
++------+-----------+------+---------+
+|    2 | suresh    |   20 | NULL    |
+|    3 | vikrant   |   21 | NULL    |
+|    4 | prathmesh |   20 | NULL    |
+|    5 | abhishek  |   20 | NULL    |
+|    6 | prajakta  |   20 | NULL    |
+|    7 | pranav    |   19 | NULL    |
+|    8 | rohit     |   20 | NULL    |
++------+-----------+------+---------+
+7 rows in set (0.00 sec)
+
+**Drop table**
+mysql> create table stud1(rollno int,name varchar(20));
+Query OK, 0 rows affected (0.65 sec)
+
+mysql> show tables;
++---------------------+
+| Tables_in_D1        |
++---------------------+
+| stud1               |
+| student             |
++---------------------+
+2 rows in set (0.00 sec)
+
+mysql> drop table stud1;
+Query OK, 0 rows affected (0.08 sec)
+
+mysql> select * from stud1;
+ERROR 1146 (42S02): Table 'D1.stud1' doesn't exist
+
+***QUERIES ON VIEW***
+
+mysql> create table instructor(id int,name varchar(20),dept_name varchar(20));
+Query OK, 0 rows affected (0.88 sec)
+
+mysql> insert into instructor(id,name,dept_name) values
+    -> (1,'pravin','comp'),
+    -> (2,'rutvik','ej'),
+    -> (3,'harshad','civil'),
+    -> (4,'siddhi','IT');
+Query OK, 4 rows affected (0.14 sec)
+Records: 4  Duplicates: 0  Warnings: 0
+
+mysql> select * from instructor;
++------+----------+-----------+
+| id   | name     | dept_name |
++------+----------+-----------+
+|    1 | pravin   | comp      |
+|    2 | rutvik   | ej        |
+|    3 | harshad  | civil     |
+|    4 | siddhi   | IT        |
++------+----------+-----------+
+4 rows in set (0.00 sec)
+
+***CREATE VIEW***
+
+mysql> create view faculty as select id,name,dept_name from instructor;
+Query OK, 0 rows affected (0.14 sec)
+
+mysql> select * from faculty;
++------+----------+-----------+
+| id   | name     | dept_name |
++------+----------+-----------+
+|    1 | pravin   | comp      |
+|    2 | rutvik   | ej        |
+|    3 | harshad  | civil     |
+|    4 | siddhi   | IT        |
++------+----------+-----------+
+4 rows in set (0.00 sec)
+
+***DROP VIEW***
+
+mysql> drop table faculty;
+ERROR 1051 (42S02): Unknown table 'vaibhavi1.faculty'
+mysql> drop view faculty
+    -> ;
+Query OK, 0 rows affected (0.19 sec)
+
+mysql> select * from faculty;
+ERROR 1146 (42S02): Table 'vaibhavi1.faculty' doesn't exist
+
+***QUERIES ON INDEX***
+
+***CREATE INDEX***
+
+mysql> create  unique index instructor_index on instructor(id);
+Query OK, 0 rows affected (0.28 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+***ALTER INDEX***
+mysql> alter table instructor add index(name);
+Query OK, 0 rows affected (0.22 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+mysql> alter table instructor add index(dept_name);
+Query OK, 0 rows affected (0.26 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+mysql> show index from instructor;
++------------+------------+------------------+--------------+-------------+-----------+-------------+----------+--------+------+------------+---------+---------------+---------+------------+
+| Table      | Non_unique | Key_name         | Seq_in_index | Column_name | Collation | Cardinality | Sub_part | Packed | Null | Index_type | Comment | Index_comment | Visible | Expression |
++------------+------------+------------------+--------------+-------------+-----------+-------------+----------+--------+------+------------+---------+---------------+---------+------------+
+| instructor |          0 | instructor_index |            1 | id          | A         |           4 |     NULL |   NULL | YES  | BTREE      |         |               | YES     | NULL       |
+| instructor |          1 | name             |            1 | name        | A         |           4 |     NULL |   NULL | YES  | BTREE      |         |               | YES     | NULL       |
+| instructor |          1 | dept_name        |            1 | dept_name   | A         |           4 |     NULL |   NULL | YES  | BTREE      |         |               | YES     | NULL       |
++------------+------------+------------------+--------------+-------------+-----------+-------------+----------+--------+------+------------+---------+---------------+---------+------------+
+3 rows in set (0.01 sec)
+
+mysql> drop index dept_name on instructor;
+Query OK, 0 rows affected (0.11 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+mysql> show index from instructor;
++------------+------------+------------------+--------------+-------------+-----------+-------------+----------+--------+------+------------+---------+---------------+---------+------------+
+| Table      | Non_unique | Key_name         | Seq_in_index | Column_name | Collation | Cardinality | Sub_part | Packed | Null | Index_type | Comment | Index_comment | Visible | Expression |
++------------+------------+------------------+--------------+-------------+-----------+-------------+----------+--------+------+------------+---------+---------------+---------+------------+
+| instructor |          0 | instructor_index |            1 | id          | A         |           4 |     NULL |   NULL | YES  | BTREE      |         |               | YES     | NULL       |
+| instructor |          1 | name             |            1 | name        | A         |           4 |     NULL |   NULL | YES  | BTREE      |         |               | YES     | NULL       |
++------------+------------+------------------+--------------+-------------+-----------+-------------+----------+--------+------+------------+---------+---------------+---------+------------+
+2 rows in set (0.00 sec)

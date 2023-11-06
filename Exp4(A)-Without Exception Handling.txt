@@ -1,0 +1,139 @@
+****Without Exception Handling****
+
+mysql> create database mrunal;
+Query OK, 1 row affected (0.00 sec)
+
+mysql> use mrunal;
+Database changed
+mysql> 
+
+
+
+mysql> DELIMITER $$
+mysql> DROP PROCEDURE IF EXISTS finecal $$
+Query OK, 0 rows affected, 1 warning (0.00 sec)
+
+mysql> CREATE PROCEDURE finecal(in ID int, in name varchar(30))
+     BEGIN
+        declare fine int default 0;
+        declare days int;
+        declare idate date;
+        declare bstatus char;
+     
+        select b.idate,b.status into idate,bstatus from borrower b where (b.rollno=ID and b.nameofbook=name);
+        select datediff(sysdate(),idate)into days;
+      
+        if bstatus='I' then
+            
+            if days>30 then
+             set fine =(days-30)*50+15*5;
+            elseif days>15 and days<=30 then
+             set fine = (days-15)*5;
+            else set fine=0;
+            end if;
+                 
+            update borrower b set b.status='R' where (b.rollno=ID and b.nameofbook=name);
+            if fine>0 then
+             insert into fine values(ID,sysdate(),fine);
+            end if;
+            
+      elseif bstatus='r' then 
+      
+                select concat('the student ',ID, 'is already return the book ',name)as MESSAGE;
+      Else
+     
+Display all 779 possibilities? (y or n) 
+       select concat('the student ',ID, 'status is UNKNOWN')as MESSAGE;
+      end if;
+      END $$
+Query OK, 0 rows affected (0.00 sec)
+
+mysql> 
+mysql> 
+mysql> create table borrower (rollno int,idate date, nameofbook varchar(30), status char);
+     insert into borrower values (111, '2002-8-25','dbms','I');
+     insert into borrower values (111, '2002-8-18','TOC','I');
+     insert into borrower values (222, '2002-8-10','cns','I');
+     $$
+Query OK, 0 rows affected (0.01 sec)
+
+Query OK, 1 row affected (0.01 sec)
+
+Query OK, 1 row affected (0.01 sec)
+
+Query OK, 1 row affected (0.02 sec)
+
+mysql> DELIMITER ;
+mysql> select * from borrower ;
++--------+------------+------------+--------+
+| rollno | idate      | nameofbook | status |
++--------+------------+------------+--------+
+|    111 | 2002-08-25 | dbms       | I      |
+|    111 | 2002-08-18 | TOC        | I      |
+|    222 | 2002-08-10 | cns        | I      |
++--------+------------+------------+--------+
+3 rows in set (0.00 sec)
+
+mysql> desc borrower;
++------------+-------------+------+-----+---------+-------+
+| Field      | Type        | Null | Key | Default | Extra |
++------------+-------------+------+-----+---------+-------+
+| rollno     | int(11)     | YES  |     | NULL    |       |
+| idate      | date        | YES  |     | NULL    |       |
+| nameofbook | varchar(30) | YES  |     | NULL    |       |
+| status     | char(1)     | YES  |     | NULL    |       |
++------------+-------------+------+-----+---------+-------+
+4 rows in set (0.00 sec)
+
+mysql> create table fine( rollno int, rdate datetime, amount int);
+Query OK, 0 rows affected (0.02 sec)
+
+mysql> desc fine;
++--------+----------+------+-----+---------+-------+
+| Field  | Type     | Null | Key | Default | Extra |
++--------+----------+------+-----+---------+-------+
+| rollno | int(11)  | YES  |     | NULL    |       |
+| rdate  | datetime | YES  |     | NULL    |       |
+| amount | int(11)  | YES  |     | NULL    |       |
++--------+----------+------+-----+---------+-------+
+3 rows in set (0.00 sec)
+
+mysql> insert into borrower value (222,'2002-9-12','TOC','I');
+Query OK, 1 row affected (0.00 sec)
+
+mysql> call finecal(111,'cns');
++----------------------------------+
+| MESSAGE                          |
++----------------------------------+
+| the student 111status is UNKNOWN |
++----------------------------------+
+1 row in set (0.00 sec)
+
+Query OK, 0 rows affected (0.00 sec)
+
+---------------------------------------
+
+call finecal(222,'cns');
+mysql> 
+mysql> call finecal(222,'cns');
+Query OK, 1 row affected (0.01 sec)
+
+mysql> select * from borrower;
++--------+------------+------------+--------+
+| rollno | idate      | nameofbook | status |
++--------+------------+------------+--------+
+|    111 | 2002-08-25 | dbms       | I      |
+|    111 | 2002-08-18 | TOC        | I      |
+|    222 | 2002-08-10 | cns        | R      |
+|    222 | 2002-09-12 | TOC        | I      |
++--------+------------+------------+--------+
+4 rows in set (0.00 sec)
+
+mysql> select * from fine;
++--------+---------------------+--------+
+| rollno | rdate               | amount |
++--------+---------------------+--------+
+|    222 | 2022-11-11 10:34:06 | 368475 |
++--------+---------------------+--------+
+1 row in set (0.00 sec)
+

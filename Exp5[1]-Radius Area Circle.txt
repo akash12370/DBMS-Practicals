@@ -1,0 +1,41 @@
+Write a PL/SQL code of block to calculate the area of circle for a value of radius varying from 5 to 10.Store the radius and corresponding values of calculated area in an empty table named areas, consisting of two columns radius and area:-
+
+mysql> use V1;
+Database changed
+mysql> delimiter $$
+mysql> create table area(radius int,area decimal(5,2));
+     $$
+Query OK, 0 rows affected (0.50 sec)
+
+mysql> create procedure ar(in n int)
+    begin
+    declare a decimal(5,2);
+    loop1:loop
+    if(n>10) then
+    leave loop1;
+    end if;
+    set a=3.14*n*n;
+    insert into areas values(n,a);
+    set n=n+1;
+    end loop loop1;
+    select * from areas;
+    end $$
+Query OK, 0 rows affected (0.04 sec)
+
+mysql> call ar(10);
+    $$
++--------+--------+
+| radius | area   |
++--------+--------+
+|      5 |  78.50 |
+|      6 | 113.04 |
+|      7 | 153.86 |
+|      8 | 200.96 |
+|      9 | 254.34 |
+|     10 | 314.00 |
+|     10 | 314.00 |
++--------+--------+
+7 rows in set (0.01 sec)
+Query OK, 0 rows affected (0.02 sec)
+
+

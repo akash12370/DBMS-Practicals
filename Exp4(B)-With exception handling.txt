@@ -1,0 +1,77 @@
+****With Exception Handling****
+
+mysql> use A1;
+Reading table information for completion of table and column names
+You can turn off this feature to get a quicker startup with -A
+
+Database changed
+mysql> DELIMITER $$
+mysql> DROP PROCEDURE IF EXISTS finecal $$
+Query OK, 0 rows affected (0.00 sec)
+
+mysql> CREATE PROCEDURE finecal(in ID int, in name varchar(30))
+     BEGIN
+     declare fine int default 0;
+     declare days int;
+     declare idate date;
+     declare bstatus char;
+     declare exit handler for SQLSTATE '02000' select 'you entered data not found in database';
+     select b.idate,b.status into idate, bstatus from borrower b where (b.rollno=id and b.nameofbook=name);
+     
+     
+     select datediff(sysdate(),idate) into days;
+     if bstatus='I' then
+     if days > 30 then
+     set fine = (days-30)*50 + 15*5;
+     elseif days>15 and days<=30 then
+     set fine = (days-15) * 5;
+     else set fine=0;
+     end if ;
+     update borrower b set b.status='R' where (b.rollno=ID and b.nameofbook=name);
+     if fine>0 then
+     insert into fine values(ID,sysdate(),fine);
+     end if ;
+     elseif bstatus='R' then
+     Select concat('The Student ',ID,' is already returned the book ',name) as MESSAGE;
+     else
+     Select concat('The Student ',ID,' status is UNKNOWN' ) as MESSAGE;
+     end if ;
+     END $$
+Query OK, 0 rows affected (0.01 sec)
+ 
+mysql> call finecal(222,'cns');
+     $$
++--------------------------------------------------+
+| MESSAGE                                          |
++--------------------------------------------------+
+| The Student 222 is already returned the book cns |
++--------------------------------------------------+
+1 row in set (0.00 sec)
+
+Query OK, 0 rows affected (0.00 sec)
+ 
+mysql> call finecal(111,'TOC');
+     $$
+Query OK, 1 row affected (0.00 sec)
+
+mysql> select * from borrower;
+     $$
++--------+------------+------------+--------+
+| rollno | idate      | nameofbook | status |
++--------+------------+------------+--------+
+|    111 | 2002-08-25 | dbms       | I      |
+|    111 | 2002-08-18 | TOC        | R      |
+|    222 | 2002-08-10 | cns        | R      |
+|    222 | 2002-09-12 | TOC        | I      |
++--------+------------+------------+--------+
+4 rows in set (0.00 sec)
+
+mysql> select * from fine$$
++--------+---------------------+--------+
+| rollno | rdate               | amount |
++--------+---------------------+--------+
+|    222 | 2022-11-11 10:34:06 | 368475 |
+|    111 | 2022-11-11 10:58:37 | 368075 |
++--------+---------------------+--------+
+2 rows in set (0.00 sec)
+

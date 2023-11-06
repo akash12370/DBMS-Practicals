@@ -1,0 +1,183 @@
+mysql> create table borrower(rollno int, name varchar(30), dateofissue date, nameofbook varchar(30), status char(10));
+Query OK, 0 rows affected (0.19 sec)
+
+mysql> delimiter $$
+mysql> insert borrower values (101,'abc','2023-10-15','DBMS','r');
+    -> insert borrower values (102,'efg','2023-09-15','TOC','r');
+    -> insert borrower values (103,'PQR','2023-09-23','DBMS','i');
+    -> insert borrower values (103,'RST','2023-09-30','SPOS','i');
+    -> insert borrower values (105,'QWE','2023-09-30','IoT','i');
+    -> insert borrower values (105,'QWE','2023-10-6','IoT','r');
+    -> $$
+Query OK, 1 row affected (0.03 sec)
+
+Query OK, 1 row affected (0.06 sec)
+
+Query OK, 1 row affected (0.13 sec)
+
+Query OK, 1 row affected (0.16 sec)
+
+Query OK, 1 row affected (0.18 sec)
+
+Query OK, 1 row affected (0.21 sec)
+
+mysql> create table library_audit(rollno int, name varchar(10), dateofissue date,nameofbook varchar(10), status char,ts timestamp);
+    -> $$
+Query OK, 0 rows affected (0.19 sec)
+
+mysql> select * from borrower $$
++--------+------+-------------+------------+--------+
+| rollno | name | dateofissue | nameofbook | status |
++--------+------+-------------+------------+--------+
+|    101 | abc  | 2023-10-15  | DBMS       | r      |
+|    102 | efg  | 2023-09-15  | TOC        | r      |
+|    103 | PQR  | 2023-09-23  | DBMS       | i      |
+|    103 | RST  | 2023-09-30  | SPOS       | i      |
+|    105 | QWE  | 2023-09-30  | IoT        | i      |
+|    105 | QWE  | 2023-10-06  | IoT        | r      |
++--------+------+-------------+------------+--------+
+6 rows in set (0.00 sec)
+
+mysql> select * from library_audit $$
+Empty set (0.00 sec)
+
+mysql> create trigger after_insert after insert on borrower for each row 
+    -> begin
+    -> insert into library_audit values(new.rollno,new.name,new.dateofissue,new.nameofbook,new.status,current_timestamp);
+    -> end $$
+Query OK, 0 rows affected (0.06 sec)
+
+mysql> insert into borrower values(107,'ada','2017-08-10','SPM','i')$$
+Query OK, 1 row affected (0.04 sec)
+
+mysql> select * from library_audit $$
++--------+------+-------------+------------+--------+---------------------+
+| rollno | name | dateofissue | nameofbook | status | ts                  |
++--------+------+-------------+------------+--------+---------------------+
+|    107 | ada  | 2017-08-10  | SPM        | i      | 2023-10-09 10:22:28 |
++--------+------+-------------+------------+--------+---------------------+
+1 row in set (0.00 sec)
+
+mysql> select * from borrower $$
++--------+------+-------------+------------+--------+
+| rollno | name | dateofissue | nameofbook | status |
++--------+------+-------------+------------+--------+
+|    101 | abc  | 2023-10-15  | DBMS       | r      |
+|    102 | efg  | 2023-09-15  | TOC        | r      |
+|    103 | PQR  | 2023-09-23  | DBMS       | i      |
+|    103 | RST  | 2023-09-30  | SPOS       | i      |
+|    105 | QWE  | 2023-09-30  | IoT        | i      |
+|    105 | QWE  | 2023-10-06  | IoT        | r      |
+|    107 | ada  | 2017-08-10  | SPM        | i      |
++--------+------+-------------+------------+--------+
+7 rows in set (0.00 sec)
+
+mysql> insert into borrower values(108,'mad','2017-10-9','SPM','i')$$
+Query OK, 1 row affected (0.03 sec)
+
+mysql> select * from library_audit $$
++--------+------+-------------+------------+--------+---------------------+
+| rollno | name | dateofissue | nameofbook | status | ts                  |
++--------+------+-------------+------------+--------+---------------------+
+|    107 | ada  | 2017-08-10  | SPM        | i      | 2023-10-09 10:22:28 |
+|    108 | mad  | 2017-10-09  | SPM        | i      | 2023-10-09 10:23:26 |
++--------+------+-------------+------------+--------+---------------------+
+2 rows in set (0.00 sec)
+
+mysql> select * from borrower $$
++--------+------+-------------+------------+--------+
+| rollno | name | dateofissue | nameofbook | status |
++--------+------+-------------+------------+--------+
+|    101 | abc  | 2023-10-15  | DBMS       | r      |
+|    102 | efg  | 2023-09-15  | TOC        | r      |
+|    103 | PQR  | 2023-09-23  | DBMS       | i      |
+|    103 | RST  | 2023-09-30  | SPOS       | i      |
+|    105 | QWE  | 2023-09-30  | IoT        | i      |
+|    105 | QWE  | 2023-10-06  | IoT        | r      |
+|    107 | ada  | 2017-08-10  | SPM        | i      |
+|    108 | mad  | 2017-10-09  | SPM        | i      |
++--------+------+-------------+------------+--------+
+8 rows in set (0.00 sec)
+
+
+mysql> create trigger after_delete delete on borrower for each row
+    -> begin
+    -> insert into library_audit values(old.rollno, old.name,old.dateofissue,old.nameofbook,old.status,current_timestamp());
+    -> end $$
+Query OK, 0 rows affected (0.06 sec)
+
+mysql> delete from borrower where rollno=103 $$
+Query OK, 2 rows affected (0.03 sec)
+
+mysql> select * from borrower $$
++--------+------+-------------+------------+--------+
+| rollno | name | dateofissue | nameofbook | status |
++--------+------+-------------+------------+--------+
+|    101 | abc  | 2023-10-15  | DBMS       | r      |
+|    102 | efg  | 2023-09-15  | TOC        | r      |
+|    105 | QWE  | 2023-09-30  | IoT        | i      |
+|    105 | QWE  | 2023-10-06  | IoT        | r      |
+|    107 | ada  | 2017-08-10  | SPM        | i      |
+|    108 | mad  | 2017-10-09  | SPM        | i      |
++--------+------+-------------+------------+--------+
+6 rows in set (0.00 sec)
+
+mysql> select * from library_audit $$
++--------+------+-------------+------------+--------+---------------------+
+| rollno | name | dateofissue | nameofbook | status | ts                  |
++--------+------+-------------+------------+--------+---------------------+
+|    107 | ada  | 2017-08-10  | SPM        | i      | 2023-10-09 10:22:28 |
+|    108 | mad  | 2017-10-09  | SPM        | i      | 2023-10-09 10:23:26 |
+|    103 | PQR  | 2023-09-23  | DBMS       | i      | 2023-10-09 10:28:37 |
+|    103 | RST  | 2023-09-30  | SPOS       | i      | 2023-10-09 10:28:37 |
++--------+------+-------------+------------+--------+---------------------+
+4 rows in set (0.00 sec)
+
+mysql> create trigger after_update after update on borrower for each row
+    -> begin
+    -> insert into library_audit values(old.rollno,old.name,old.dateofissue,old.nameofbook,old.status,current_timestamp());
+    -> end $$
+Query OK, 0 rows affected (0.05 sec)
+
+mysql> select * from borrower $$
++--------+------+-------------+------------+--------+
+| rollno | name | dateofissue | nameofbook | status |
++--------+------+-------------+------------+--------+
+|    101 | abc  | 2023-10-15  | DBMS       | r      |
+|    102 | efg  | 2023-09-15  | TOC        | r      |
+|    105 | QWE  | 2023-09-30  | IoT        | i      |
+|    105 | QWE  | 2023-10-06  | IoT        | r      |
+|    107 | ada  | 2017-08-10  | SPM        | i      |
+|    108 | mad  | 2017-10-09  | SPM        | i      |
++--------+------+-------------+------------+--------+
+6 rows in set (0.00 sec)
+
+mysql> update borrower set status='r' where borrower.rollno=107 $$
+Query OK, 1 row affected (0.05 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> select * from borrower $$
++--------+------+-------------+------------+--------+
+| rollno | name | dateofissue | nameofbook | status |
++--------+------+-------------+------------+--------+
+|    101 | abc  | 2023-10-15  | DBMS       | r      |
+|    102 | efg  | 2023-09-15  | TOC        | r      |
+|    105 | QWE  | 2023-09-30  | IoT        | i      |
+|    105 | QWE  | 2023-10-06  | IoT        | r      |
+|    107 | ada  | 2017-08-10  | SPM        | r      |
+|    108 | mad  | 2017-10-09  | SPM        | i      |
++--------+------+-------------+------------+--------+
+6 rows in set (0.00 sec)
+
+mysql> select * from library_audit $$
++--------+------+-------------+------------+--------+---------------------+
+| rollno | name | dateofissue | nameofbook | status | ts                  |
++--------+------+-------------+------------+--------+---------------------+
+|    107 | ada  | 2017-08-10  | SPM        | i      | 2023-10-09 10:22:28 |
+|    108 | mad  | 2017-10-09  | SPM        | i      | 2023-10-09 10:23:26 |
+|    103 | PQR  | 2023-09-23  | DBMS       | i      | 2023-10-09 10:28:37 |
+|    103 | RST  | 2023-09-30  | SPOS       | i      | 2023-10-09 10:28:37 |
+|    107 | ada  | 2017-08-10  | SPM        | i      | 2023-10-09 10:32:02 |
++--------+------+-------------+------------+--------+---------------------+
+5 rows in set (0.00 sec)
+

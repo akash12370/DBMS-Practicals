@@ -1,0 +1,172 @@
+*** Design atleast 10 SQL queries for suitable database application using SQL DML statements: Insert, Select, Update, Delete.***
+
+mysql> use D1;
+Database changed
+mysql> show tables;
++---------------------+
+| Tables_in_vaibhavi1 |
++---------------------+
+| instructor          |
+| student             |
++---------------------+
+2 rows in set (0.00 sec)
+
+mysql> create table employee_details(e_id int, e_name varchar(20),age int, address varchar(20),salary int, primary key(e_id));
+Query OK, 0 rows affected (0.22 sec)
+
+***INSERT***
+
+mysql> insert into employee_details values
+     (11,'soham',65,'khed',25000),
+     (13,'neha',34,'nashik',23000),
+     (40,'navin',26,'nagar',20000),
+     (24,'sandhya',20,'pune',28000),
+     (9,'suraj',45,'satara',30000);
+Query OK, 5 rows affected (0.11 sec)
+Records: 5  Duplicates: 0  Warnings: 0
+
+***SELECT***
+mysql> select * from employee_details;
++------+---------+------+---------+--------+
+| e_id | e_name  | age  | address | salary |
++------+---------+------+---------+--------+
+|    9 | suraj   |   45 | satara  |  30000 |
+|   11 | soham   |   65 | khed    |  25000 |
+|   13 | neha    |   34 | nashik  |  23000 |
+|   24 | sandhya |   20 | pune    |  28000 |
+|   40 | navin   |   26 | nagar   |  20000 |
++------+---------+------+---------+--------+
+5 rows in set (0.00 sec)
+
+***UPDATE***
+mysql> update employee_details
+    set address='mumbai' where address='pune';
+Query OK, 1 row affected (0.02 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> select * from employee_details;
++------+---------+------+---------+--------+
+| e_id | e_name  | age  | address | salary |
++------+---------+------+---------+--------+
+|    9 | suraj   |   45 | satara  |  30000 |
+|   11 | soham   |   65 | khed    |  25000 |
+|   13 | neha    |   34 | nashik  |  23000 |
+|   24 | sandhya |   20 | mumbai  |  28000 |
+|   40 | navin   |   26 | nagar   |  20000 |
++------+---------+------+---------+--------+
+5 rows in set (0.00 sec)
+
+***WHERE CLAUSE***
+mysql> select * from employee_details where salary=20000;
++------+--------+------+---------+--------+
+| e_id | e_name | age  | address | salary |
++------+--------+------+---------+--------+
+|   40 | navin  |   26 | nagar   |  20000 |
++------+--------+------+---------+--------+
+1 row in set (0.00 sec)
+
+***AND***
+mysql> select e_id,e_name,salary from employee_details where salary>20000 and age<30;
++------+---------+--------+
+| e_id | e_name  | salary |
++------+---------+--------+
+|   24 | sandhya |  28000 |
++------+---------+--------+
+1 row in set (0.00 sec)
+
+***OR***
+mysql> select e_id,e_name,salary from employee_details where salary>20000 or age<30;
++------+---------+--------+
+| e_id | e_name  | salary |
++------+---------+--------+
+|    9 | suraj   |  30000 |
+|   11 | soham   |  25000 |
+|   13 | neha    |  23000 |
+|   24 | sandhya |  28000 |
+|   40 | navin   |  20000 |
++------+---------+--------+
+5 rows in set (0.00 sec)
+
+***DISTINCT***
+
+mysql> select distinct salary from employee_details;
++--------+
+| salary |
++--------+
+|  30000 |
+|  25000 |
+|  23000 |
+|  28000 |
+|  20000 |
++--------+
+5 rows in set (0.34 sec)
+
+***AGGREGATE FUNCTIONS***
+
+mysql> select count(*) from employee_details;
++----------+
+| count(*) |
++----------+
+|        5 |
++----------+
+1 row in set (0.11 sec)
+
+1.SUM():
+
+mysql> select sum(salary) from employee_details;
++-------------+
+| sum(salary) |
++-------------+
+|      126000 |
++-------------+
+1 row in set (0.00 sec)
+
+2.AVG():
+
+mysql> select avg(salary) from employee_details;
++-------------+
+| avg(salary) |
++-------------+
+|  25200.0000 |
++-------------+
+1 row in set (0.02 sec)
+
+3.MIN():
+
+mysql> select min(age)from employee_details;
++----------+
+| min(age) |
++----------+
+|       20 |
++----------+
+1 row in set (0.08 sec)
+
+4.MAX():
+
+mysql> select max(age) from employee_details;
++----------+
+| max(age) |
++----------+
+|       65 |
++----------+
+1 row in set (0.00 sec)
+
+***SET OPERATOR(UNION)***
+
+mysql> select e_name from employee_details
+ 	 union
+ 	 select name from instructor;
++----------+
+| e_name   |
++----------+
+| niraj    |
+| shobha   |
+| neha     |
+| sandhya  |
+| neeta    |
+| harshada |
+| pooja    |
+| rutuja   |
+| sonali   |
++----------+
+9 rows in set (0.00 sec)

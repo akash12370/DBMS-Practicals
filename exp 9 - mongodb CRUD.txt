@@ -1,0 +1,612 @@
+Practical no. 9 :
+(base) student@student:~$ mongo
+MongoDB shell version v4.4.17
+connecting to:
+mongodb://127.0.0.1:27017/?compressors=disabled&gssapiServiceName=mongodb
+Implicit session: session { "id" : UUID("cf9f241b-a332-46cc-8ad1-7237a11fa16d") }
+MongoDB server version: 4.4.17
+---
+The server generated these startup warnings when booting:
+2023-10-12T13:02:44.605+05:30: Using the XFS filesystem is strongly recommended
+with the WiredTiger storage engine. See
+http://dochub.mongodb.org/core/prodnotes-filesystem
+2023-10-12T13:02:46.197+05:30: Access control is not enabled for the database.
+Read and write access to data and configuration is unrestricted
+---
+---
+Enable MongoDB's free cloud-based monitoring service, which will then receive and
+display
+metrics about your deployment (disk utilization, CPU, operation statistics, etc).
+The monitoring data will be available on a MongoDB website with a unique URL
+accessible to you
+and anyone you share the URL with. MongoDB may use this information to make
+product
+improvements and to suggest MongoDB products and deployment options to you.
+To enable free monitoring, run the following command: db.enableFreeMonitoring()
+To permanently disable this reminder, run the following command:
+db.disableFreeMonitoring()
+---
+> use manasi
+switched to db manasi
+> db.createCollection('student');
+{ "ok" : 1 }
+> db.Student.insert({'Rno':'1','Name':'manasi','Class':'TE COMP'});
+WriteResult({ "nInserted" : 1 })
+> db.Student.insert({'Rno':'2','Name':'aditi','Class':'TE COMP'});
+WriteResult({ "nInserted" : 1 })
+> db.Student.insert({'Rno':'3','Name':'dnyani','Class':'TE COMP'});
+WriteResult({ "nInserted" : 1 })
+> db.Student.insert({'Rno':'4','Name':'saniya','Class':'TE COMP'});
+WriteResult({ "nInserted" : 1 })
+> db.Student.insert({'Rno':'5','Name':'anushka','Class':'TE COMP'});
+WriteResult({ "nInserted" : 1 })
+> db.Student.insert({'Rno':'6','Name':'vaishnavi','Class':'TE COMP'});
+WriteResult({ "nInserted" : 1 })
+> db.student.find();
+> db.Student.find();
+{ "_id" : ObjectId("6527a73960680d7b1dbcdef3"), "Rno" : "1", "Name" : "manasi", "Class" :
+"TE COMP" }
+{ "_id" : ObjectId("6527a75460680d7b1dbcdef4"), "Rno" : "2", "Name" : "aditi", "Class" :
+"TE COMP" }
+{ "_id" : ObjectId("6527a78d60680d7b1dbcdef5"), "Rno" : "3", "Name" : "dnyani", "Class" :
+"TE COMP" }
+{ "_id" : ObjectId("6527a7ac60680d7b1dbcdef6"), "Rno" : "4", "Name" : "saniya", "Class" :
+"TE COMP" }
+{ "_id" : ObjectId("6527a7c260680d7b1dbcdef7"), "Rno" : "5", "Name" : "anushka", "Class"
+: "TE COMP" }
+{ "_id" : ObjectId("6527a7eb60680d7b1dbcdef8"), "Rno" : "6", "Name" : "vaishnavi",
+"Class" : "TE COMP" }
+> db.Student.find().pretty();
+{
+"_id" : ObjectId("6527a73960680d7b1dbcdef3"),
+"Rno" : "1",
+"Name" : "manasi",
+"Class" : "TE COMP"
+}
+{
+"_id" : ObjectId("6527a75460680d7b1dbcdef4"),
+"Rno" : "2",
+"Name" : "aditi",
+"Class" : "TE COMP"
+}
+{
+"_id" : ObjectId("6527a78d60680d7b1dbcdef5"),
+"Rno" : "3",
+"Name" : "dnyani",
+"Class" : "TE COMP"
+}
+{
+"_id" : ObjectId("6527a7ac60680d7b1dbcdef6"),
+"Rno" : "4",
+"Name" : "saniya",
+"Class" : "TE COMP"
+}
+{
+"_id" : ObjectId("6527a7c260680d7b1dbcdef7"),
+"Rno" : "5",
+"Name" : "anushka",
+"Class" : "TE COMP"
+}
+{
+"_id" : ObjectId("6527a7eb60680d7b1dbcdef8"),
+"Rno" : "6",
+"Name" : "vaishnavi",
+"Class" : "TE COMP"
+}
+> show dbs;
+admin 0.000GB
+config 0.000GB
+local 0.000GB
+manasi 0.000GB
+test 0.000GB
+> db.Student.update({'Name':'Saniya'},{$set:{'Name':'Vedant'}})
+WriteResult({ "nMatched" : 0, "nUpserted" : 0, "nModified" : 0 })
+> db.Student.find().pretty();
+{
+"_id" : ObjectId("6527a73960680d7b1dbcdef3"),
+"Rno" : "1",
+"Name" : "manasi",
+"Class" : "TE COMP"
+}
+{
+"_id" : ObjectId("6527a75460680d7b1dbcdef4"),
+"Rno" : "2",
+"Name" : "aditi",
+"Class" : "TE COMP"
+}
+{
+"_id" : ObjectId("6527a78d60680d7b1dbcdef5"),
+"Rno" : "3",
+"Name" : "dnyani",
+"Class" : "TE COMP"
+}
+{
+"_id" : ObjectId("6527a7ac60680d7b1dbcdef6"),
+"Rno" : "4",
+"Name" : "saniya",
+"Class" : "TE COMP"
+}
+{
+"_id" : ObjectId("6527a7c260680d7b1dbcdef7"),
+"Rno" : "5",
+"Name" : "anushka",
+"Class" : "TE COMP"
+}
+{
+"_id" : ObjectId("6527a7eb60680d7b1dbcdef8"),
+"Rno" : "6",
+"Name" : "vaishnavi",
+"Class" : "TE COMP"
+}
+> db.Student.update({'Name':'saniya'},{$set:{'Name':'vedant'}})
+WriteResult({ "nMatched" : 1, "nUpserted" : 0, "nModified" : 1 })
+> db.Student.find().pretty();
+{
+"_id" : ObjectId("6527a73960680d7b1dbcdef3"),
+"Rno" : "1",
+"Name" : "manasi",
+"Class" : "TE COMP"
+}
+{
+"_id" : ObjectId("6527a75460680d7b1dbcdef4"),
+"Rno" : "2",
+"Name" : "aditi",
+"Class" : "TE COMP"
+}
+{
+"_id" : ObjectId("6527a78d60680d7b1dbcdef5"),
+"Rno" : "3",
+"Name" : "dnyani",
+"Class" : "TE COMP"
+}
+{
+"_id" : ObjectId("6527a7ac60680d7b1dbcdef6"),
+"Rno" : "4",
+"Name" : "vedant",
+"Class" : "TE COMP"
+}
+{
+"_id" : ObjectId("6527a7c260680d7b1dbcdef7"),
+"Rno" : "5",
+"Name" : "anushka",
+"Class" : "TE COMP"
+}
+{
+"_id" : ObjectId("6527a7eb60680d7b1dbcdef8"),
+"Rno" : "6",
+"Name" : "vaishnavi",
+"Class" : "TE COMP"
+}
+> db.Student.count();
+6
+> db.Student.find($and:[{"Name":"aditi"},{"Rno":"2"}]}).pretty();
+uncaught exception: SyntaxError: missing ) after argument list :
+@(shell):1:20
+> db.Student.find({$and:[{"Name":"aditi"},{"Rno":"2"}]}).pretty();
+{
+"_id" : ObjectId("6527a75460680d7b1dbcdef4"),
+"Rno" : "2",
+"Name" : "aditi",
+"Class" : "TE COMP"
+}
+> db.Student.find({$or:[{"Name":"aditi"},{"Rno":"2"}]}).pretty();
+{
+"_id" : ObjectId("6527a75460680d7b1dbcdef4"),
+"Rno" : "2",
+"Name" : "aditi",
+"Class" : "TE COMP"
+}
+> db.Student.find({$or:[{"Name":"manasi"},{"Rno":"2"}]}).pretty();
+{
+"_id" : ObjectId("6527a73960680d7b1dbcdef3"),
+"Rno" : "1",
+"Name" : "manasi",
+"Class" : "TE COMP"
+}
+{
+"_id" : ObjectId("6527a75460680d7b1dbcdef4"),
+"Rno" : "2",
+"Name" : "aditi",
+"Class" : "TE COMP"
+}
+> db.Student.find({$and:[{"Name":"manasi"},{"Rno":"2"}]}).pretty();
+> db.Student.find({$or:[{"Name":"manasi"},{"Rno":"2"}]}).pretty();
+{
+"_id" : ObjectId("6527a73960680d7b1dbcdef3"),
+"Rno" : "1",
+"Name" : "manasi",
+"Class" : "TE COMP"
+}
+{
+"_id" : ObjectId("6527a75460680d7b1dbcdef4"),
+"Rno" : "2",
+"Name" : "aditi",
+"Class" : "TE COMP"
+}
+> db.Student.find({$or:[{"Name":"manasi"},{"Rno":"1"}]}).pretty();
+{
+"_id" : ObjectId("6527a73960680d7b1dbcdef3"),
+"Rno" : "1",
+"Name" : "manasi",
+"Class" : "TE COMP"
+}
+> db.Student.find({$and:[{"Name":"manasi"},{"Rno":"1"}]}).pretty();
+{
+"_id" : ObjectId("6527a73960680d7b1dbcdef3"),
+"Rno" : "1",
+"Name" : "manasi",
+"Class" : "TE COMP"
+}
+> db.Student.find({$and:[{"Name":"manasi"},{"Rno":"1"}]}).pretty();
+{
+"_id" : ObjectId("6527a73960680d7b1dbcdef3"),
+"Rno" : "1",
+"Name" : "manasi",
+"Class" : "TE COMP"
+}
+> db.Student.find({$or:[{"Name":"manasi"},{"Rno":"1"}]}).pretty();
+{
+"_id" : ObjectId("6527a73960680d7b1dbcdef3"),
+"Rno" : "1",
+"Name" : "manasi",
+"Class" : "TE COMP"
+}
+> db.Student.find({$or:[{"Name":"manasi"},{"Class":"TE COMP"}]}).pretty();
+{
+"_id" : ObjectId("6527a73960680d7b1dbcdef3"),
+"Rno" : "1",
+"Name" : "manasi",
+"Class" : "TE COMP"
+}
+{
+"_id" : ObjectId("6527a75460680d7b1dbcdef4"),
+"Rno" : "2",
+"Name" : "aditi",
+"Class" : "TE COMP"
+}
+{
+"_id" : ObjectId("6527a78d60680d7b1dbcdef5"),
+"Rno" : "3",
+"Name" : "dnyani",
+"Class" : "TE COMP"
+}
+{
+"_id" : ObjectId("6527a7ac60680d7b1dbcdef6"),
+"Rno" : "4",
+"Name" : "vedant",
+"Class" : "TE COMP"
+}
+{
+"_id" : ObjectId("6527a7c260680d7b1dbcdef7"),
+"Rno" : "5",
+"Name" : "anushka",
+"Class" : "TE COMP"
+}
+{
+"_id" : ObjectId("6527a7eb60680d7b1dbcdef8"),
+"Rno" : "6",
+"Name" : "vaishnavi",
+"Class" : "TE COMP"
+}
+> db.Student.find({$nor:[{"Name":"manasi"},{"Class":"TECOMP"}]}).pretty();
+{
+"_id" : ObjectId("6527a75460680d7b1dbcdef4"),
+"Rno" : "2",
+"Name" : "aditi",
+"Class" : "TE COMP"
+}
+{
+"_id" : ObjectId("6527a78d60680d7b1dbcdef5"),
+"Rno" : "3",
+"Name" : "dnyani",
+"Class" : "TE COMP"
+}
+{
+"_id" : ObjectId("6527a7ac60680d7b1dbcdef6"),
+"Rno" : "4",
+"Name" : "vedant",
+"Class" : "TE COMP"
+}
+{
+"_id" : ObjectId("6527a7c260680d7b1dbcdef7"),
+"Rno" : "5",
+"Name" : "anushka",
+"Class" : "TE COMP"
+}
+{
+"_id" : ObjectId("6527a7eb60680d7b1dbcdef8"),
+"Rno" : "6",
+"Name" : "vaishnavi",
+"Class" : "TE COMP"
+}
+> db.Student.find({$nor:[{"Name":"manasi"},{"Class":"TECOMP"}]}).pretty();
+{
+"_id" : ObjectId("6527a75460680d7b1dbcdef4"),
+"Rno" : "2",
+"Name" : "aditi",
+"Class" : "TE COMP"
+}
+{
+"_id" : ObjectId("6527a78d60680d7b1dbcdef5"),
+"Rno" : "3",
+"Name" : "dnyani",
+"Class" : "TE COMP"
+}
+{
+"_id" : ObjectId("6527a7ac60680d7b1dbcdef6"),
+"Rno" : "4",
+"Name" : "vedant",
+"Class" : "TE COMP"
+}
+{
+"_id" : ObjectId("6527a7c260680d7b1dbcdef7"),
+"Rno" : "5",
+"Name" : "anushka",
+"Class" : "TE COMP"
+}
+{
+"_id" : ObjectId("6527a7eb60680d7b1dbcdef8"),
+"Rno" : "6",
+"Name" : "vaishnavi",
+"Class" : "TE COMP"
+}
+> db.Student.find({$nor:[{"Name":"manasi"},{"Class":"TE COMP"}]}).pretty();
+> db.Student.find({$nor:[{"Name":"manasi"},{"Class":"TECOMP"}]}).pretty();
+{
+"_id" : ObjectId("6527a75460680d7b1dbcdef4"),
+"Rno" : "2",
+"Name" : "aditi",
+"Class" : "TE COMP"
+}
+{
+"_id" : ObjectId("6527a78d60680d7b1dbcdef5"),
+"Rno" : "3",
+"Name" : "dnyani",
+"Class" : "TE COMP"
+}
+{
+"_id" : ObjectId("6527a7ac60680d7b1dbcdef6"),
+"Rno" : "4",
+"Name" : "vedant",
+"Class" : "TE COMP"
+}
+{
+"_id" : ObjectId("6527a7c260680d7b1dbcdef7"),
+"Rno" : "5",
+"Name" : "anushka",
+"Class" : "TE COMP"
+}
+{
+"_id" : ObjectId("6527a7eb60680d7b1dbcdef8"),
+"Rno" : "6",
+"Name" : "vaishnavi",
+"Class" : "TE COMP"
+}
+> db.Student.find({"Rno":{$not:{$It:"3"}}}).pretty();
+Error: error: {
+"ok" : 0,
+"errmsg" : "unknown operator: $It",
+"code" : 2,
+"codeName" : "BadValue"
+}
+> db.Student.find({"Rno":{$not:{$lt:"3"}}}).pretty();
+{
+"_id" : ObjectId("6527a78d60680d7b1dbcdef5"),
+"Rno" : "3",
+"Name" : "dnyani",
+"Class" : "TE COMP"
+}
+{
+"_id" : ObjectId("6527a7ac60680d7b1dbcdef6"),
+"Rno" : "4",
+"Name" : "vedant",
+"Class" : "TE COMP"
+}
+{
+"_id" : ObjectId("6527a7c260680d7b1dbcdef7"),
+"Rno" : "5",
+"Name" : "anushka",
+"Class" : "TE COMP"
+}
+{
+"_id" : ObjectId("6527a7eb60680d7b1dbcdef8"),
+"Rno" : "6",
+"Name" : "vaishnavi",
+"Class" : "TE COMP"
+}
+> db.Student.find({"Rno":{$eq:"5"}}).pretty();
+{
+"_id" : ObjectId("6527a7c260680d7b1dbcdef7"),
+"Rno" : "5",
+"Name" : "anushka",
+"Class" : "TE COMP"
+}
+> db.Student.find({"Rno":{$ne:"5"}}).pretty();
+{
+"_id" : ObjectId("6527a73960680d7b1dbcdef3"),
+"Rno" : "1",
+"Name" : "manasi",
+"Class" : "TE COMP"
+}
+{
+"_id" : ObjectId("6527a75460680d7b1dbcdef4"),
+"Rno" : "2",
+"Name" : "aditi",
+"Class" : "TE COMP"
+}
+{
+"_id" : ObjectId("6527a78d60680d7b1dbcdef5"),
+"Rno" : "3",
+"Name" : "dnyani",
+"Class" : "TE COMP"
+}
+{
+"_id" : ObjectId("6527a7ac60680d7b1dbcdef6"),
+"Rno" : "4",
+"Name" : "vedant",
+"Class" : "TE COMP"
+}
+{
+"_id" : ObjectId("6527a7eb60680d7b1dbcdef8"),
+"Rno" : "6",
+"Name" : "vaishnavi",
+"Class" : "TE COMP"
+}
+> db.Student.find({"Rno":{$gt:"5"}}).pretty();
+{
+"_id" : ObjectId("6527a7eb60680d7b1dbcdef8"),
+"Rno" : "6",
+"Name" : "vaishnavi",
+"Class" : "TE COMP"
+}
+> db.Student.find({"Rno":{$gte:"5"}}).pretty();
+{
+"_id" : ObjectId("6527a7c260680d7b1dbcdef7"),
+"Rno" : "5",
+"Name" : "anushka",
+"Class" : "TE COMP"
+}
+{
+"_id" : ObjectId("6527a7eb60680d7b1dbcdef8"),
+"Rno" : "6",
+"Name" : "vaishnavi",
+"Class" : "TE COMP"
+}
+> db.Student.find({"Rno":{$lt:"5"}}).pretty();
+{
+"_id" : ObjectId("6527a73960680d7b1dbcdef3"),
+"Rno" : "1",
+"Name" : "manasi",
+"Class" : "TE COMP"
+}
+{
+"_id" : ObjectId("6527a75460680d7b1dbcdef4"),
+"Rno" : "2",
+"Name" : "aditi",
+"Class" : "TE COMP"
+}
+{
+"_id" : ObjectId("6527a78d60680d7b1dbcdef5"),
+"Rno" : "3",
+"Name" : "dnyani",
+"Class" : "TE COMP"
+}
+{
+"_id" : ObjectId("6527a7ac60680d7b1dbcdef6"),
+"Rno" : "4",
+"Name" : "vedant",
+"Class" : "TE COMP"
+}
+> db.Student.find({"Rno":{$lte:"5"}}).pretty();
+{
+"_id" : ObjectId("6527a73960680d7b1dbcdef3"),
+"Rno" : "1",
+"Name" : "manasi",
+"Class" : "TE COMP"
+}
+{
+"_id" : ObjectId("6527a75460680d7b1dbcdef4"),
+"Rno" : "2",
+"Name" : "aditi",
+"Class" : "TE COMP"
+}
+{
+"_id" : ObjectId("6527a78d60680d7b1dbcdef5"),
+"Rno" : "3",
+"Name" : "dnyani",
+"Class" : "TE COMP"
+}
+{
+"_id" : ObjectId("6527a7ac60680d7b1dbcdef6"),
+"Rno" : "4",
+"Name" : "vedant",
+"Class" : "TE COMP"
+}
+{
+"_id" : ObjectId("6527a7c260680d7b1dbcdef7"),
+"Rno" : "5",
+"Name" : "anushka",
+"Class" : "TE COMP"
+}
+> db.Student.find({"Rno":{$lt:"5",$gt:"2"}}).pretty();
+{
+"_id" : ObjectId("6527a78d60680d7b1dbcdef5"),
+"Rno" : "3",
+"Name" : "dnyani",
+"Class" : "TE COMP"
+}
+{
+"_id" : ObjectId("6527a7ac60680d7b1dbcdef6"),
+"Rno" : "4",
+"Name" : "vedant",
+"Class" : "TE COMP"
+}
+> db.Student.find({"Rno":{$lte:"5",$gte:"2"}}).pretty();
+{
+"_id" : ObjectId("6527a75460680d7b1dbcdef4"),
+"Rno" : "2",
+"Name" : "aditi",
+"Class" : "TE COMP"
+}
+{
+"_id" : ObjectId("6527a78d60680d7b1dbcdef5"),
+"Rno" : "3",
+"Name" : "dnyani",
+"Class" : "TE COMP"
+}
+{
+"_id" : ObjectId("6527a7ac60680d7b1dbcdef6"),
+"Rno" : "4",
+"Name" : "vedant",
+"Class" : "TE COMP"
+}
+{
+"_id" : ObjectId("6527a7c260680d7b1dbcdef7"),
+"Rno" : "5",
+"Name" : "anushka",
+"Class" : "TE COMP"
+}
+> db.Student.remove({'ADD':''MP});
+uncaught exception: SyntaxError: missing } after property list :
+@(shell):1:27
+> db.Student.remove({'ADD':'MP'});
+WriteResult({ "nRemoved" : 0 })
+> db.Student.remove({'Name':'manasi'},1);
+WriteResult({ "nRemoved" : 1 })
+> db.Student.find().pretty();
+{
+"_id" : ObjectId("6527a75460680d7b1dbcdef4"),
+"Rno" : "2",
+"Name" : "aditi",
+"Class" : "TE COMP"
+}
+{
+"_id" : ObjectId("6527a78d60680d7b1dbcdef5"),
+"Rno" : "3",
+"Name" : "dnyani",
+"Class" : "TE COMP"
+}
+{
+"_id" : ObjectId("6527a7ac60680d7b1dbcdef6"),
+"Rno" : "4",
+"Name" : "vedant",
+"Class" : "TE COMP"
+}
+{
+"_id" : ObjectId("6527a7c260680d7b1dbcdef7"),
+"Rno" : "5",
+"Name" : "anushka",
+"Class" : "TE COMP"
+}
+{
+"_id" : ObjectId("6527a7eb60680d7b1dbcdef8"),
+"Rno" : "6",
+"Name" : "vaishnavi",
+"Class" : "TE COMP"
+}
+> db.Student.drop();
+true
+> db.Student.find().pretty();
+> ^C
+bye
+(base) student@student:~$

@@ -1,0 +1,127 @@
+****PL/SQL Stored Function ****
+mysql>  CREATE FUNCTION function_name [ (parameter datatype [, parameter
+	delimiter $$
+	drop function if exists factorial $$
+	create function factorial (n
+	int) returns bigintbegin
+	declare fact
+	bigint
+	default 1;
+	while n>0
+	do
+		set fact=fact*n;
+		set n=n-1;
+	end while;
+	return fact;
+	end $
+Output:
+select factorial(10);
+
+****PL/SQL Stored Procedure****
+
+--stud_marks table--
+mysql> CREATE TABLE stud_marks(rollno int primary key, name varchar(20),marks int);
+Query OK, 0 rows affected (0.46 sec)
+
+mysql> INSERT INTO stud_marks values
+   	 (1,'Ajay',1200),
+	(2,'Aditya',958),
+	(3,'Jay',750),
+	(4,'Sagar',853),
+	(5,'Karan',650),
+	(6,'Shubham',560),
+	(7,'Vaibhav',458),
+	(8,'Praful',1455),
+	(9,'Akash',865),
+	(10,'Saloni',1154);
+Query OK, 10 rows affected (0.16 sec)
+Records: 10  Duplicates: 0  Warnings: 0
+
+mysql> select * from stud_marks;
++--------+---------+-------+
+| rollno | name    | marks |
++--------+---------+-------+
+|      1 | Ajay    |  1200 |
+|      2 | Aditya  |   958 |
+|      3 | Jay     |   750 |
+|      4 | Sagar   |   853 |
+|      5 | Karan   |   650 |
+|      6 | Shubham |   560 |
+|      7 | Vaibhav |   458 |
+|      8 | Praful  |  1455 |
+|      9 | Akash   |   865 |
+|     10 | Saloni  |  1154 |
++--------+---------+-------+
+10 rows in set (0.00 sec)
+
+--result table--
+
+mysql> CREATE TABLE result (rollno int, name varchar(20), class varchar(20));
+Query OK, 0 rows affected (0.19 sec)
+
+mysql> select * from result;
+Empty set (0.00 sec)
+
+
+---Write Stored Procedure Namely p_grade for categorization of students.---
+
+mysql> delimiter ##
+mysql> create procedure p_grade()
+     begin
+     DECLARE done INT DEFAULT FALSE;
+     declare s_marks int;
+     declare s_rollno int;
+     declare s_name varchar(30);
+     declare s_class varchar(80);
+     declare s_student cursor For Select rollno, name, marks from stud_marks;
+     DECLARE CONTINUE HANDLER FOR NOT FOUND SET done = TRUE;
+     open s_student;
+     read_loop: LOOP
+     fetch s_student into s_rollno,s_name,s_marks;
+     IF done THEN
+     LEAVE read_loop;
+     END IF;
+     if(s_marks<=1500 and s_marks>=990) then
+     set s_class='Distinction';
+     elseif(s_marks<=989 and s_marks>=900) then
+     set s_class='First Class';
+     elseif (s_marks<=899 and s_marks>=825) then
+     set s_class='Higher Second Class';
+     else
+     set s_class='Pass';
+     end if;
+     insert into result(rollno,name,class)values(s_rollno,s_name,s_class);
+     END LOOP;
+     close s_student;
+     end;
+     ##
+Query OK, 0 rows affected (0.16 sec)
+
+
+mysql> select * from result;
+     ##
+Empty set (0.00 sec)
+
+mysql> call p_grade();
+     ##
+Query OK, 0 rows affected (0.32 sec)
+
+
+*** retriving table Result***
+
+mysql> select * from result##
++--------+---------+---------------------+
+| rollno | name    | class               |
++--------+---------+---------------------+
+|      1 | Ajay    | Distinction         |
+|      2 | Aditya  | First Class         |
+|      3 | Jay     | Pass                |
+|      4 | Sagar   | Higher Second Class |
+|      5 | Karan   | Pass                |
+|      6 | Shubham | Pass                |
+|      7 | Vaibhav | Pass                |
+|      8 | Praful  | Distinction         |
+|      9 | Akash   | Higher Second Class |
+|     10 | Saloni  | Distinction         |
++--------+---------+---------------------+
+10 rows in set (0.00 sec)

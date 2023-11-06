@@ -1,0 +1,226 @@
+***Demonstrate the use of all types of Joins and Sub-Query***
+
+mysql> use A1;
+Database changed
+mysql> create table customer(id int,name varchar(20),age int,address varchar(40),salary int);
+Query OK, 0 rows affected (0.17 sec)
+
+mysql> insert into customer values(1,'vaibhav',20,'satara',25000);
+Query OK, 1 row affected (0.72 sec)
+
+mysql> insert into customer values
+    (2,'sakshi',19,'nagar',15000),
+     (3,'siddhu',20,'hadpsar',20000),
+     (4,'prasad',26,'saswad',24000),
+     (5,'sumit',21,'katraj',25000);
+Query OK, 4 rows affected (0.06 sec)
+Records: 4  Duplicates: 0  Warnings: 0
+
+mysql> insert into customer values
+   (6,'anuj',24,'nashik',24000),
+   (7,'yash',23,'karnatak',32000);
+Query OK, 2 rows affected (0.11 sec)
+Records: 2  Duplicates: 0  Warnings: 0
+
+mysql> select * from customer;
++------+----------+------+----------+--------+
+| id   | name     | age  | address  | salary |
++------+----------+------+----------+--------+
+|    1 | vaibhav  |   20 | satara   |  25000 |
+|    2 | sakshi   |   19 | nagar    |  15000 |
+|    3 | siddhu   |   20 | hadpsar  |  20000 |
+|    4 | prasad   |   26 | saswad   |  24000 |
+|    5 | sumit    |   21 | katraj   |  25000 |
+|    6 | anuj     |   24 | nashik   |  24000 |
+|    7 | yash     |   23 | karnatak |  32000 |
++------+----------+------+----------+--------+
+7 rows in set (0.00 sec)
+
+mysql> create table neworder(o_id int,orderdate date,cust_id int,amount int);
+Query OK, 0 rows affected (0.25 sec)
+
+mysql> insert into neworder values
+     (102,'2022-09-14',3,2000),
+     (101,'2022-09-26',2,3000),
+     (103,'2022-10-15',4,1500),
+     (100,'2022-11-19',3,1000);
+Query OK, 4 rows affected (0.36 sec)
+Records: 4  Duplicates: 0  Warnings: 0
+
+mysql> select * from neworder;
++------+------------+---------+--------+
+| o_id   | orderdate  | cust_id | amount |
++------+------------+---------+--------+
+|  102 | 2022-09-14 |       3 |   2000 |
+|  101 | 2022-09-26 |       2 |   3000 |
+|  103 | 2022-10-15 |       4 |   1500 |
+|  100 | 2022-11-19 |       3 |   1000 |
++------+------------+---------+--------+
+4 rows in set (0.00 sec)
+
+
+***SQL JOIN***
+
+mysql> select id,name,age,amount from customer,neworder
+     where customer.id=neworder.cust_id;
++------+---------+------+--------+
+| id   | name    | age  | amount |
++------+---------+------+--------+
+|    2 | sakshi  |   19 |   3000 |
+|    3 | siddhu  |   20 |   1000 |	
+|    3 | siddhu  |   20 |   2000 |
+|    4 | prasad  |   26 |   1500 |
++------+---------+------+--------+
+4 rows in set (0.00 sec)
+
+
+***SQL INNER JOIN***
+mysql> select id,name,amount,orderdate from customer
+     inner join neworder
+     on customer.id=neworder.cust_id;
++------+--------+--------+------------+
+| id   | name   | amount | orderdate  |
++------+--------+--------+------------+
+|    2 | sakshi |   3000 | 2022-09-26 |
+|    3 | siddhi |   1000 | 2022-11-19 |
+|    3 | siddhi |   2000 | 2022-09-14 |
+|    4 | prasad |   1500 | 2022-10-15 |
++------+--------+--------+------------+
+4 rows in set (0.00 sec)
+
+
+***SQL LEFT JOIN***
+mysql> select id,name,amount,orderdate from customer
+     left join neworder
+     on customer.id=neworder.cust_id;
++------+----------+--------+------------+
+| id   | name     | amount | orderdate  |
++------+----------+--------+------------+
+|    1 | vaibhav  |   NULL | NULL       |
+|    2 | sakshu   |   3000 | 2022-09-26 |
+|    3 | siddhu   |   1000 | 2022-11-19 |
+|    3 | siddhu   |   2000 | 2022-09-14 |
+|    4 | prasad   |   1500 | 2022-10-15 |
+|    5 | sumit    |   NULL | NULL       |
+|    6 | anuj     |   NULL | NULL       |
+|    7 | yash     |   NULL | NULL       |
++------+----------+--------+------------+
+8 rows in set (0.00 sec)
+
+
+***SQL RIGHT JOIN***
+mysql> select id,name,amount,orderdate from customer
+     right join neworder
+     on customer.id=neworder.cust_id;
++------+--------+--------+------------+
+| id   | name   | amount | orderdate  |
++------+--------+--------+------------+
+|    3 | siddhu |   2000 | 2022-09-14 |
+|    2 | sakshi |   3000 | 2022-09-26 |
+|    4 | prasad |   1500 | 2022-10-15 |
+|    3 | siddhu |   1000 | 2022-11-19 |
++------+--------+--------+------------+
+4 rows in set (0.00 sec)
+
+
+***SQL CROSS JOIN***
+
+mysql> select id,name,amount,orderdate
+    -> from customer,neworder;
++------+----------+--------+------------+
+| id   | name     | amount | orderdate  |
++------+----------+--------+------------+
+|    1 | vaibhav  |   1500 | 2022-08-23 |
+|    1 | vaibhav  |   1000 | 2022-11-19 |
+|    1 | vaibhav  |   1500 | 2022-10-15 |
+|    1 | vaibhav  |   3000 | 2022-09-26 |
+|    1 | vaibhav  |   2000 | 2022-09-14 |
+|    2 | sakshi   |   1500 | 2022-08-23 |
+|    2 | sakshi   |   1000 | 2022-11-19 |
+|    2 | sakshi   |   1500 | 2022-10-15 |
+|    2 | sakshi   |   3000 | 2022-09-26 |
+|    2 | sakshi   |   2000 | 2022-09-14 |
+|    3 | siddhu   |   1500 | 2022-08-23 |
+|    3 | siddhu   |   1000 | 2022-11-19 |
+|    3 | siddhu   |   1500 | 2022-10-15 |
+|    3 | siddhu   |   3000 | 2022-09-26 |
+|    3 | siddhu   |   2000 | 2022-09-14 |
+|    4 | prasad   |   1500 | 2022-08-23 |
+|    4 | prasad   |   1000 | 2022-11-19 |
+|    4 | prasad   |   1500 | 2022-10-15 |
+|    4 | prasad   |   3000 | 2022-09-26 |
+|    4 | prasad   |   2000 | 2022-09-14 |
+|    5 | sumit    |   1500 | 2022-08-23 |
+|    5 | sumit    |   1000 | 2022-11-19 |
+|    5 | sumit    |   1500 | 2022-10-15 |
+|    5 | sumit    |   3000 | 2022-09-26 |
+|    5 | sumit    |   2000 | 2022-09-14 |
+|    6 | anuj     |   1500 | 2022-08-23 |
+|    6 | anuj     |   1000 | 2022-11-19 |
+|    6 | anuj     |   1500 | 2022-10-15 |
+|    6 | anuj     |   3000 | 2022-09-26 |
+|    6 | anuj     |   2000 | 2022-09-14 |
+|    7 | yash     |   1500 | 2022-08-23 |
+|    7 | yash     |   1000 | 2022-11-19 |
+|    7 | yash     |   1500 | 2022-10-15 |
+|    7 | yash     |   3000 | 2022-09-26 |
+|    7 | yash     |   2000 | 2022-09-14 |
++------+----------+--------+------------+
+35 rows in set (0.00 sec)
+
+
+***SUBQUERIES***
+mysql> select * from customer where id in(select id from customer where salary>20000);
++------+----------+------+----------+--------+
+| id   | name     | age  | address  | salary |
++------+----------+------+----------+--------+
+|    1 | vaibhav  |   20 | satara   |  25000 |
+|    4 | prasad   |   26 | saswad   |  24000 |
+|    5 | sumit    |   21 | katraj   |  25000 |
+|    6 | anuj     |   24 | nashik   |  24000 |
+|    7 | yash     |   23 | karnatak |  32000 |
++------+----------+------+----------+--------+
+5 rows in set (0.00 sec)
+
+mysql> select id from customer where salary>=20000;
++------+
+| id   |
++------+
+|    1 |
+|    3 |
+|    4 |
+|    5 |
+|    6 |
+|    7 |
++------+
+6 rows in set (0.00 sec)
+
+mysql> select cust_id from neworder where cust_id in(select id from customer where salary>=20000);
++---------+
+| cust_id |
++---------+
+|       3 |
+|       4 |
+|       3 |
++---------+
+3 rows in set (0.00 sec)
+
+mysql> select * from neworder where cust_id in(select cust_id from neworder where cust_id in(select id from customer where salary>=20000));
++------------+---------+--------+------+
+| orderdate  | cust_id | amount | o_id |
++------------+---------+--------+------+
+| 2022-09-14 |       3 |   2000 |  102 |
+| 2022-10-15 |       4 |   1500 |  103 |
+| 2022-11-19 |       3 |   1000 |  100 |
++------------+---------+--------+------+
+3 rows in set (0.10 sec)
+
+mysql> select * from neworder where cust_id in(select id from customer where salary>=20000);
++------------+---------+--------+------+
+| orderdate  | cust_id | amount | o_id |
++------------+---------+--------+------+
+| 2022-09-14 |       3 |   2000 |  102 |
+| 2022-10-15 |       4 |   1500 |  103 |
+| 2022-11-19 |       3 |   1000 |  100 |
++------------+---------+--------+------+
+3 rows in set (0.00 sec)

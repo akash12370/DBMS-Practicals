@@ -1,0 +1,131 @@
+(base) student@student:~$ mongo
+MongoDB shell version: 2.6.10
+connecting to: test
+> use comp
+switched to db comp
+> db.createCollection('website');
+{ "ok" : 1 }
+> db.website.insert({'roll':'1','name':'saurabh','amount':1500,'url':'www.yahoo.com'});
+WriteResult({ "nInserted" : 1 })
+> db.website.insert({'roll':'1','name':'saurabh','amount':1500,'url':'www.yahoo.com'});
+WriteResult({ "nInserted" : 1 })
+> db.website.insert({'roll':'2','name':'ajit','amount':1500,'url':'www.yahoo.com'});
+WriteResult({ "nInserted" : 1 })
+> db.website.insert({'roll':'1','name':'saurabh','amount':1500,'url':'www.yahoo.com'});
+WriteResult({ "nInserted" : 1 })
+>  db.website.insert({'roll':'3','name':'karan','amount':1000,'url':'www.yahoo.com'});
+WriteResult({ "nInserted" : 1 })
+> 'www.yahoo.com'});
+2023-10-18T10:33:44.454+0530 SyntaxError: Unexpected token }
+> db.website.insert({'roll':'4','name':'manoj','amount':200'www.yahoo.com'});0,'url':
+... db.website.insert({'roll':'4','name':'manoj','amount':200'
+2023-10-18T10:35:27.363+0530 SyntaxError: Unexpected string
+> db.website.insert({'roll':'4','name':'manoj','amount':200','url':'www.yahoo.com'});
+2023-10-18T10:36:18.147+0530 SyntaxError: Unexpected string
+>  db.website.insert({'roll':'4','name':'manoj','amount':200,'url':'www.yahoo.com'});
+WriteResult({ "nInserted" : 1 })
+> db.website.find();
+{ "_id" : ObjectId("652f6689a675772e628a2fb3"), "roll" : "1", "name" : "saurabh", "amount" : 1500, "url" : "www.yahoo.com" }
+{ "_id" : ObjectId("652f6697a675772e628a2fb4"), "roll" : "1", "name" : "saurabh", "amount" : 1500, "url" : "www.yahoo.com" }
+{ "_id" : ObjectId("652f66d0a675772e628a2fb5"), "roll" : "2", "name" : "ajit", "amount" : 1500, "url" : "www.yahoo.com" }
+{ "_id" : ObjectId("652f66eea675772e628a2fb6"), "roll" : "1", "name" : "saurabh", "amount" : 1500, "url" : "www.yahoo.com" }
+{ "_id" : ObjectId("652f671fa675772e628a2fb7"), "roll" : "3", "name" : "karan", "amount" : 1000, "url" : "www.yahoo.com" }
+{ "_id" : ObjectId("652f67f1a675772e628a2fb8"), "roll" : "4", "name" : "manoj", "amount" : 200, "url" : "www.yahoo.com" }
+> db.wbsite.aggregate({$group:{_id:"$name","total":{$sum:"$amount"}}});
+> dnb.website..aggregate({$group:{_id:"$name","total":{$sum:"$amount"}}});
+2023-10-18T10:39:51.740+0530 SyntaxError: Unexpected token .
+> db.website.aggregate({$group:{_id:"$name","total":{$sum:"$amount"}}});
+{ "_id" : "manoj", "total" : 200 }
+{ "_id" : "karan", "total" : 1000 }
+{ "_id" : "ajit", "total" : 1500 }
+{ "_id" : "saurabh", "total" : 4500 }
+>  db.website.aggregate({$group:{_id:"$name","total":{$avg:"$amount"}}});
+{ "_id" : "manoj", "total" : 200 }
+{ "_id" : "karan", "total" : 1000 }
+{ "_id" : "ajit", "total" : 1500 }
+{ "_id" : "saurabh", "total" : 1500 }
+>  db.website.aggregate({$group:{_id:"$name","total":{$min:"$amount"}}});
+{ "_id" : "manoj", "total" : 200 }
+{ "_id" : "karan", "total" : 1000 }
+{ "_id" : "ajit", "total" : 1500 }
+{ "_id" : "saurabh", "total" : 1500 }
+>  db.website.aggregate({$group:{_id:"$name","total":{$max:"$amount"}}});
+{ "_id" : "manoj", "total" : 200 }
+{ "_id" : "karan", "total" : 1000 }
+{ "_id" : "ajit", "total" : 1500 }
+{ "_id" : "saurabh", "total" : 1500 }
+>  db.website.aggregate({$group:{_id:"$name","total":{$first:"$amount"}}});
+{ "_id" : "manoj", "total" : 200 }
+{ "_id" : "karan", "total" : 1000 }
+{ "_id" : "ajit", "total" : 1500 }
+{ "_id" : "saurabh", "total" : 1500 }
+>  db.website.aggregate({$group:{_id:"$name","total":{$last:"$amount"}}});
+{ "_id" : "manoj", "total" : 200 }
+{ "_id" : "karan", "total" : 1000 }
+{ "_id" : "ajit", "total" : 1500 }
+{ "_id" : "saurabh", "total" : 1500 }
+>  db.website.aggregate({$group:{_id:"$name","total":{$push:"$amount"}}});
+{ "_id" : "manoj", "total" : [ 200 ] }
+{ "_id" : "karan", "total" : [ 1000 ] }
+{ "_id" : "ajit", "total" : [ 1500 ] }
+{ "_id" : "saurabh", "total" : [ 1500, 1500, 1500 ] }
+>  db.website.aggregate({$group:{_id:"$name","total":{$sum:1}}});
+{ "_id" : "manoj", "total" : 1 }
+{ "_id" : "karan", "total" : 1 }
+{ "_id" : "ajit", "total" : 1 }
+{ "_id" : "saurabh", "total" : 3 }
+> db.creatCollection('website');
+2023-10-18T10:46:41.734+0530 TypeError: Property 'creatCollection' of object comp is not a function
+> db.createCollection('website');
+{ "ok" : 0, "errmsg" : "collection already exists" }
+>  db.createCollection('website1');
+{ "ok" : 1 }
+> db.website.insert({'r':1,'name':'saurabh'});
+WriteResult({ "nInserted" : 1 })
+> db.website1.find().pretty()
+> ;
+> db.website.insert({'r':1,'name':'saurabh'});
+WriteResult({ "nInserted" : 1 })
+>  db.website1.insert({'r':1,'name':'saurabh'});
+WriteResult({ "nInserted" : 1 })
+> db.website1.find().pretty()
+{
+	"_id" : ObjectId("652f6b36a675772e628a2fbb"),
+	"r" : 1,
+	"name" : "saurabh"
+}
+> db.website1.createIndex({'name':1})
+{
+	"createdCollectionAutomatically" : false,
+	"numIndexesBefore" : 1,
+	"numIndexesAfter" : 2,
+	"ok" : 1
+}
+>  db.website1.getIndexses()
+2023-10-18T10:52:49.495+0530 TypeError: Property 'getIndexses' of object comp.website1 is not a function
+> db.website1.getIndexes()
+[
+	{
+		"v" : 1,
+		"key" : {
+			"_id" : 1
+		},
+		"name" : "_id_",
+		"ns" : "comp.website1"
+	},
+	{
+		"v" : 1,
+		"key" : {
+			"name" : 1
+		},
+		"name" : "name_1",
+		"ns" : "comp.website1"
+	}
+]
+> db.website.dropIndex({'name':-1})
+{
+	"nIndexesWas" : 1,
+	"ok" : 0,
+	"errmsg" : "can't find index with key:{ name: -1.0 }"
+}
+

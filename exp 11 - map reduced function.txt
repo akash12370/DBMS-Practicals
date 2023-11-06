@@ -1,0 +1,91 @@
+(base) student@student:~$ mongo
+MongoDB shell version: 2.6.10
+connecting to: test
+> show dbs
+Badge 0.078GB
+Bridge 0.078GB
+Brigade 0.078GB
+KJCOEMR 0.078GB
+admin 0.078GB
+comp 0.078GB
+local 0.078GB
+> use pract11
+switched to db pract11
+> show dbs
+Badge 0.078GB
+Bridge 0.078GB
+Brigade 0.078GB
+KJCOEMR 0.078GB
+admin 0.078GB
+comp 0.078GB
+local 0.078GB
+> db.createCollection('orders');
+{ "ok" : 1 }
+> db.orders.insert({"Item_name":"AAA","price":25})
+WriteResult({ "nInserted" : 1 })
+> db.orders.insert({"Item_name":"AAA","price":15})
+WriteResult({ "nInserted" : 1 })
+> db.orders.insert({"Item_name":"AAA","price":10})
+WriteResult({ "nInserted" : 1 })
+> db.orders.insert({"Item_name":"AAA","price":14})
+WriteResult({ "nInserted" : 1 })
+> db.orders.insert({"Item_name":"bbb","price":16})
+WriteResult({ "nInserted" : 1 })
+> db.orders.insert({"Item_name":"bbb","price":26})
+WriteResult({ "nInserted" : 1 })
+> db.orders.insert({"Item_name":"ccc","price":17})
+WriteResult({ "nInserted" : 1 })
+> var mapFunction1=function(){
+... ... emit(this.Item_name,this.price);
+... ... };
+> var reduceFunction1=function(keyItemname,valuesPrices){
+... ... return(Array.sum)(valuesPrices);
+... ... };
+> db.orders.mapReduce(
+... ... mapFunction1,
+... ... reduceFunction1,
+... ... {out:"itemstotalprice"});
+{
+"result" : "itemstotalprice",
+"timeMillis" : 46,
+"counts" : {
+"input" : 7,
+"emit" : 7,
+"reduce" : 2,
+"output" : 3
+},
+"ok" : 1
+}> db.itemstotalprice.find();
+{ "_id" : "AAA", "value" : 64 }
+{ "_id" : "bbb", "value" : 42 }
+{ "_id" : "ccc", "value" : 17 }
+> var map2=function(){
+... emit(this.Item_name,this.price);};
+> var reduce2=function(name,values){
+... var total=0;
+... for(var index=0;index<values.length;++index)
+... {total += values[index];
+... }
+... return total/values.length;
+... }
+> db.orders.mapReduce(
+... map2,
+... reduce2,
+... {out:"avgprice"}
+... )
+{
+"result" : "avgprice",
+"timeMillis" : 3,
+"counts" : {
+"input" : 7,
+"emit" : 7,
+"reduce" : 2,
+"output" : 3
+},
+"ok" : 1
+}
+> db.avgprice.find();
+{ "_id" : "AAA", "value" : 16 }
+{ "_id" : "bbb", "value" : 21 }
+{ "_id" : "ccc", "value" : 17 }
+> 
